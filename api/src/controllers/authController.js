@@ -1,18 +1,20 @@
-import User, { findOne } from '../models/User';
+import User from '../models/User.js';
+import jwt from 'jsonwebtoken';
+
 
 const authController = {
   async register(req, res) {
     try {
       const { name, email, password } = req.body;
-
+      const userClass = new User();
       // Verificar se o usuário já existe no banco de dados
-      const existingUser = await findOne({ email });
+      const existingUser = await userClass.findByEmail({ email });
       if (existingUser) {
         return res.status(400).json({ message: 'Usuário já existe' });
       }
 
       // Criar um novo usuário
-      const newUser = new User({ name, email, password });
+      const newUser = userClass.create({ name, email, password });
       await newUser.save();
 
       res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
@@ -25,9 +27,9 @@ const authController = {
   async login(req, res) {
     try {
       const { email, password } = req.body;
-
+      const userClass = new User();
       // Verificar se o usuário existe no banco de dados
-      const user = await findOne({ email });
+      const user = await userClass.findByEmail({ email });
       if (!user) {
         return res.status(404).json({ message: 'Usuário não encontrado' });
       }
@@ -39,8 +41,9 @@ const authController = {
 
       // Realizar a autenticação do usuário
       // ...
+      const token = generateToken(user);
 
-      res.status(200).json({ message: 'Login realizado com sucesso' });
+      res.status(200).json({ message: 'Login realizado com sucesso', token });
     } catch (error) {
       console.error('Erro no login:', error);
       res.status(500).json({ message: 'Erro no login' });
@@ -50,9 +53,9 @@ const authController = {
   async forgotPassword(req, res) {
     try {
       const { email } = req.body;
-
+      const userClass = new User();
       // Verificar se o usuário existe no banco de dados
-      const user = await findOne({ email });
+      const user = await userClass.findByEmail({ email });
       if (!user) {
         return res.status(404).json({ message: 'Usuário não encontrado' });
       }
@@ -67,5 +70,11 @@ const authController = {
     }
   },
 };
+
+function generateToken(user) {
+  const token = jwt.sign({ id: user.id, email: user.email }, 'secreto', { expiresIn: '1h' });
+  return token;
+}
+
 
 export default authController;

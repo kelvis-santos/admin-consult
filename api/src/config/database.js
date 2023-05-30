@@ -1,4 +1,5 @@
-import { Pool } from 'pg';
+import pkg from 'pg';
+const { Pool } = pkg;
 
 // Configuração da conexão com o banco de dados
 const pool = new Pool({
@@ -18,4 +19,4 @@ const query = async (text, params) => {
     }
 };
 
-export default query;
+export { query };

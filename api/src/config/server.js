@@ -1,10 +1,8 @@
 import express from 'express';
 import { json } from 'body-parser';
 // const { Pool } = require('pg');
-import userRoutes from './routes/usersRoute';
-import authRoutes from './routes/authRoute';
-// eslint-disable-next-line no-unused-vars
-import query from './config/database';
+import authRoutes from '../routes/usersRoutes.js';
+import userRoutes from '../routes/authRoutes.js';
 
 // Configurações do servidor
 const app = express();
