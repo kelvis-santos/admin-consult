@@ -2,8 +2,7 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
 
-const authController = {
-  async register(req, res) {
+  const register = async (req, res) => {
     try {
       const { name, email, password } = req.body;
       const userClass = new User();
@@ -22,9 +21,9 @@ const authController = {
       console.error('Erro no registro de usuário:', error);
       res.status(500).json({ message: 'Erro no registro de usuário' });
     }
-  },
+  };
 
-  async login(req, res) {
+  const login = async (req, res) => {
     try {
       const { email, password } = req.body;
       const userClass = new User();
@@ -48,9 +47,9 @@ const authController = {
       console.error('Erro no login:', error);
       res.status(500).json({ message: 'Erro no login' });
     }
-  },
+  };
 
-  async forgotPassword(req, res) {
+  const forgotPassword = async (req, res) => {
     try {
       const { email } = req.body;
       const userClass = new User();
@@ -68,8 +67,7 @@ const authController = {
       console.error('Erro na recuperação de senha:', error);
       res.status(500).json({ message: 'Erro na recuperação de senha' });
     }
-  },
-};
+  };
 
 function generateToken(user) {
   const token = jwt.sign({ id: user.id, email: user.email }, 'secreto', { expiresIn: '1h' });
@@ -77,4 +75,8 @@ function generateToken(user) {
 }
 
 
-export default authController;
+export {
+  register,
+  login,
+  forgotPassword,
+};

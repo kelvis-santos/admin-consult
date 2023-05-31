@@ -7,6 +7,10 @@ const listUsers = async (req, res) => {
         // Buscar todos os usuários no banco de dados
         const users = await userClass.findUsers();
 
+        if (users.length === 0) {
+            users.push({ message: 'Nenhum usuário encontrado' });
+        }
+
         res.status(200).json(users);
     } catch (error) {
         console.error('Erro ao listar usuários:', error);

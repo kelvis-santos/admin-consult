@@ -1,8 +1,8 @@
 import express from 'express';
-import { json } from 'body-parser';
-// const { Pool } = require('pg');
-import authRoutes from '../routes/usersRoutes.js';
-import userRoutes from '../routes/authRoutes.js';
+import json from 'body-parser';
+
+import authRoutes from '../routes/authRoutes.js';
+import userRoutes from '../routes/usersRoutes.js';
 
 // Configurações do servidor
 const app = express();
