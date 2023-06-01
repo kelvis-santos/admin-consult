@@ -3,9 +3,8 @@ import User from '../models/User.js';
 
 const listUsers = async (req, res) => {
     try {
-        const userClass = new User();
         // Buscar todos os usuários no banco de dados
-        const users = await userClass.findUsers();
+        const users = await User.findUsers();
 
         if (users.length === 0) {
             users.push({ message: 'Nenhum usuário encontrado' });
@@ -21,9 +20,8 @@ const listUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
-        const userClass = new User();
         // Buscar usuário pelo ID no banco de dados
-        const user = await userClass.findUserById(id);
+        const user = await User.findUserById(id);
 
         if (!user) {
             return res.status(404).json({ message: 'Usuário não encontrado' });
@@ -39,15 +37,14 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        const userClass = new User();
         // Verificar se o usuário já existe no banco de dados
-        const existingUser = await userClass.findByFilter({ name, email });
+        const existingUser = await User.findByFilter({ name, email });
         if (existingUser) {
             return res.status(400).json({ message: 'Usuário já existe' });
         }
 
         // Criar um novo usuário
-        const newUser = userClass.create({ name, email, password });
+        const newUser = User.create(name, email, password);
 
         res.status(201).json(newUser);
     } catch (error) {
@@ -60,9 +57,8 @@ const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, email, password } = req.body;
-        const userClass = new User();
         // Verificar se o usuário existe no banco de dados
-        const user = await userClass.findUserById(id);
+        const user = await User.findUserById(id);
         if (!user) {
             return res.status(404).json({ message: 'Usuário não encontrado' });
         }
@@ -83,9 +79,8 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const { id } = req.params;
-        const userClass = new User();
         // Verificar se o usuário existe no banco de dados
-        const user = await userClass.findUserById(id);
+        const user = await User.findUserById(id);
         if (!user) {
             return res.status(404).json({ message: 'Usuário não encontrado' });
         }

@@ -2,6 +2,14 @@ import { query as queryDb  } from '../config/database.js';
 
 // Definição do modelo de usuário
 export default class User {
+
+    constructor(id, name, email, password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     static async create(name, email, password) {
         const query = 'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *';
         const values = [name, email, password];
