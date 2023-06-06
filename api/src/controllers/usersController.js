@@ -5,7 +5,7 @@ const listUsers = async (req, res) => {
     try {
         // Buscar todos os usuários no banco de dados
         const users = await User.findUsers();
-
+        console.log(users);
         if (users.length === 0) {
             users.push({ message: 'Nenhum usuário encontrado' });
         }
@@ -38,7 +38,7 @@ const createUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         // Verificar se o usuário já existe no banco de dados
-        const existingUser = await User.findByFilter({ name, email });
+        const existingUser = await User.findByFilter({ name });
         if (existingUser) {
             return res.status(400).json({ message: 'Usuário já existe' });
         }
