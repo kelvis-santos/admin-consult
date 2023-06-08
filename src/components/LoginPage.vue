@@ -2,7 +2,7 @@
   <div class="container">
     <h2>Login</h2>
     <form @submit.prevent="login">
-      <input type="text" v-model="username" placeholder="Username" required>
+      <input type="email" v-model="email" placeholder="E-mail" required>
       <input type="password" v-model="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
@@ -12,26 +12,35 @@
 </template>
 
 <script>
+import api from '../services/RestService.js';
+
 export default {
   name: 'LoginPage',
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
       error: '',
     };
   },
   methods: {
     login() {
-      // Lógica para autenticar o usuário
-      if (this.username === 'admin' && this.password === 'password') {
-        // Autenticação bem-sucedida
+      api.post('/auth/login', {
+        email: this.email,
+        password: this.password
+      })
+      .then(response => {
+        sessionStorage.setItem('token', response.data.token)
         this.$router.push('/home');
-      } else {
-        // Autenticação falhou
-        this.error = 'Invalid username or password';
-      }
-    },
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 404) {
+          this.error = 'Usuário não encontrado.';
+        } else {
+          this.error = error.message;
+        }
+      })
+    } 
   },
 };
 </script>

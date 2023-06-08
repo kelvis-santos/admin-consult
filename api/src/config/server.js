@@ -1,5 +1,5 @@
 import express from 'express';
-import json from 'body-parser';
+import cors from 'cors';
 
 import authRoutes from '../routes/authRoutes.js';
 import userRoutes from '../routes/usersRoutes.js';
@@ -8,9 +8,9 @@ import userRoutes from '../routes/usersRoutes.js';
 const app = express();
 const PORT = 3000;
 
-
-// Middleware para processar dados JSON
-app.use(json());
+// Middlewares
+app.use(cors());
+app.use(express.json());
 
 // Rota de teste
 app.get('/', (req, res) => {

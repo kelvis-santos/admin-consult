@@ -5,15 +5,14 @@ import jwt from 'jsonwebtoken';
   const register = async (req, res) => {
     try {
       const { name, email, password } = req.body;
-      const userClass = new User();
       // Verificar se o usuário já existe no banco de dados
-      const existingUser = await userClass.findByEmail({ email });
+      const existingUser = await User.findByEmail({ email });
       if (existingUser) {
         return res.status(400).json({ message: 'Usuário já existe' });
       }
 
       // Criar um novo usuário
-      const newUser = userClass.create({ name, email, password });
+      const newUser = User.create({ name, email, password });
       await newUser.save();
 
       res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
@@ -26,9 +25,8 @@ import jwt from 'jsonwebtoken';
   const login = async (req, res) => {
     try {
       const { email, password } = req.body;
-      const userClass = new User();
       // Verificar se o usuário existe no banco de dados
-      const user = await userClass.findByEmail({ email });
+      const user = await User.findByEmail(email);
       if (!user) {
         return res.status(404).json({ message: 'Usuário não encontrado' });
       }
@@ -52,9 +50,8 @@ import jwt from 'jsonwebtoken';
   const forgotPassword = async (req, res) => {
     try {
       const { email } = req.body;
-      const userClass = new User();
       // Verificar se o usuário existe no banco de dados
-      const user = await userClass.findByEmail({ email });
+      const user = await User.findByEmail({ email });
       if (!user) {
         return res.status(404).json({ message: 'Usuário não encontrado' });
       }

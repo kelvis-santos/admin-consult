@@ -27,7 +27,7 @@ export default class User {
         const query = 'SELECT * FROM users WHERE id = $1';
         const values = [id];
         const result = await queryDb(query, values);
-        return result.rows[0];
+        return result;
     }
 
     static async findByFilter(filter) {
@@ -42,7 +42,8 @@ export default class User {
         const query = 'SELECT * FROM users WHERE email = $1';
         const values = [email];
         const result = await queryDb(query, values);
-        return result.rows[0];
+        console.log(result);
+        return result.length > 0 ? result[0] : false;
     }
 
     static async update(id, name, email, password) {
