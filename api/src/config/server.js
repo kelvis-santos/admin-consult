@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import authRoutes from '../routes/authRoutes.js';
 import userRoutes from '../routes/usersRoutes.js';
+import plansRoutes from '../routes/plansRoutes.js';
 
 // Configurações do servidor
 const app = express();
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 // Rotas
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
+app.use('/plans', plansRoutes);
 
 // Iniciar o servidor
 app.listen(PORT, () => {
