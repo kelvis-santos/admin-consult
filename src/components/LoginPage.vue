@@ -1,11 +1,38 @@
 <template>
   <div class="container">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <input type="email" v-model="email" placeholder="E-mail" required>
-      <input type="password" v-model="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
+    <v-card
+    class="mx-auto mt-10 pa-5 text-center shadow-2 rounded-2 mb-5 mt-5"
+    max-width="400"
+    outlined
+    >
+      <v-card-title>Login</v-card-title>
+      <v-text-field
+        type="email"
+        label="E-mail"
+        :rules="rulesEmail"
+        v-model="email"
+        hide-details="auto"
+      ></v-text-field>
+      <v-text-field
+        type="password"
+        label="Password"
+        :rules="rulesPassword"
+        v-model="password"
+      ></v-text-field>
+
+      
+      <v-btn
+        color="deep-purple-lighten-2"
+        :loading="loading"
+        @click="login"
+      >
+        Login
+
+        <template v-slot:loader>
+          <v-progress-linear indeterminate></v-progress-linear>
+        </template>
+      </v-btn>
+    </v-card>
     <p v-if="error" class="error">{{ error }}</p>
     <router-link to="/forgot-password">Forgot Password?</router-link>
   </div>
@@ -21,16 +48,37 @@ export default {
       email: '',
       password: '',
       error: '',
+      loading: false,
+      rulesEmail: [
+        value => !!value || 'Required.',
+        value => (value || '').length <= 20 || 'Max 20 characters',
+        value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail.'
+        },
+      ],
+      rulesPassword: [
+        value => !!value || 'Required.',
+        value => (value || '').length <= 20 || 'Max 20 characters',
+        value => (value || '').length >= 6 || 'Min 6 characters',
+      ],
     };
+  },
+  watch: {
+    loading (val) {
+      if (!val) return
+    },
   },
   methods: {
     login() {
+      this.loading = true;
       api.post('/auth/login', {
         email: this.email,
         password: this.password
       })
       .then(response => {
         sessionStorage.setItem('token', response.data.token)
+        this.loading = false;
         this.$router.push('/home');
       })
       .catch(error => {
@@ -39,63 +87,17 @@ export default {
         } else {
           this.error = error.message;
         }
+        this.loading = false;
       })
     } 
   },
 };
 </script>
-<style>
+<style scoped>
 .container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 40px;
-}
-
-h2 {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  background-color: #333;
-  border: none;
-  color: #fff;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: var(--oxford-blue);
-  border: none;
-  color: #fff;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-a {
-  color: var(--lavender-web);
-  text-decoration: none;
-}
-
-/* Estilos dark mode */
-body.dark-mode {
-  background-color: #333;
-}
-
-body.dark-mode h1,
-body.dark-mode input,
-body.dark-mode button {
-  background-color: #555;
-}
-
-body.dark-mode a {
-  color: var(--lavender-web);
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin-top: 30vh;
 }
 </style>

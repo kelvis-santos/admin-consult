@@ -4,6 +4,9 @@ import cors from 'cors';
 import authRoutes from '../routes/authRoutes.js';
 import userRoutes from '../routes/usersRoutes.js';
 import plansRoutes from '../routes/plansRoutes.js';
+import reportsRoutes from '../routes/reportsRoutes.js';
+import settinsRoutes from '../routes/settingsRoutes.js';
+import userPermissionsRoutes from '../routes/userPermissionsRoutes.js';
 
 // Configurações do servidor
 const app = express();
@@ -22,6 +25,10 @@ app.get('/', (req, res) => {
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/plans', plansRoutes);
+app.use('/reports', reportsRoutes);
+app.use('/settings', settinsRoutes);
+app.use('/user-permissions', userPermissionsRoutes);
+
 
 // Iniciar o servidor
 app.listen(PORT, () => {

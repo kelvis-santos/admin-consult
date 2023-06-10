@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <TopHomeMenu />
         <Sidebar
@@ -16,20 +16,58 @@
             <router-link to="/dashboard">Dashboard</router-link>
         </div>
     </div>
-</template>
+</template> -->
+
+<template>
+    <v-app id="inspire">
+      <v-app-bar>
+        <v-btn class="blue-grey-darken-3" @click="drawer = !drawer">MENU</v-btn>
   
+        <v-toolbar-title>Application</v-toolbar-title>
+
+        <v-btn class="blue-grey-darken-3" @click="profile">Profile</v-btn>
+        <v-btn class="blue-grey-darken-3" @click="logout">Logout</v-btn>
+      </v-app-bar>
+  
+      <v-navigation-drawer
+        v-model="drawer"
+        temporary
+      >
+        <!--  -->
+      </v-navigation-drawer>
+  
+      <v-main class="bg-grey-lighten-2">
+        <v-container>
+          <v-row>
+            <template v-for="n in 1" :key="n">
+              <v-col
+                class="mt-2"
+                cols="12"
+              >
+              </v-col>
+  
+              <v-col
+                v-for="j in 6"
+                :key="`${n}${j}`"
+                cols="3"
+                md="2"
+              >
+                <v-sheet height="150"></v-sheet>
+              </v-col>
+            </template>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </template>
+
 <script>
-import TopHomeMenu from './TopHomeMenu.vue';
-import Sidebar from './SideMenu.vue';
 
 export default {
     name: 'HomePage',
-    components: {
-        TopHomeMenu,
-        Sidebar
-    },
     data() {
         return {
+            drawer: null,
         };
     },
     methods: {
@@ -37,18 +75,26 @@ export default {
             // Lógica para deslogar o usuário
             this.$router.push('/login');
         },
+        profile() {
+            // Lógica para ir para a página de perfil
+            this.$router.push('/profile');
+        },
     },
 };
 </script>
 
 <style scoped>
+
+body {
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
 .menu-dashboard {
     margin: 20px 0;
-    /* display: flex; */
     justify-content: center;
-    /* align-items: center; */
-    /* padding: 20px; */
-    /* background-color: ; */
     color: #fff;
     width: 100%;
     height: 100vh;
@@ -61,8 +107,6 @@ export default {
 .menu-dashboard .icons-menu-dashboard {
     display: flex;
     justify-content: space-evenly;
-    /* align-items: center; */
-    /* flex-direction: column; */
 }
 
 .menu-dashboard .icons-menu-dashboard a {

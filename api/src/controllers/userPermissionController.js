@@ -1,4 +1,4 @@
-import UserPermissions from "../models/UserPermissions";
+import UserPermissions from "../models/UserPermissions.js";
 
 const getUserPermissions = async (req, res) => {
     try {

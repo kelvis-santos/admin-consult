@@ -1,11 +1,26 @@
 import { query as queryDb  } from '../config/database.js';
 
 export default class UserPermissions {
-    constructor(id, user_id, permission_id, active) {
+    constructor(id, user_id, name, permission_id, active) {
         this.id = id;
         this.user_id = user_id;
+        this.name = name;
         this.permission_id = permission_id;
         this.active = active;
+    }
+
+    static async createPermission(name, description) {
+        const query = 'INSERT INTO permissions (name, description, created_at, updated_at, active) VALUES ($1, $2, current_timestamp, current_timestamp, true) RETURNING *';
+        const values = [name, description];
+        const result = await queryDb(query, values);
+        return result.rows[0];
+    }
+
+    static async updatePermission(id, name, description) {
+        const query = 'UPDATE permissions SET name = $1, description = $2, updated_at = current_timestamp WHERE id = $3 RETURNING *';
+        const values = [name, description, id];
+        const result = await queryDb(query, values);
+        return result.rows[0];
     }
 
     static async create(user_id, permission_id) {

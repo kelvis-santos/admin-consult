@@ -1,4 +1,5 @@
 import Router from 'express';
+import { validateUserData } from '../middlewares/userMiddleware.js';
 import {
     listUsers,
     getUserById,
@@ -17,7 +18,7 @@ router.get('/', listUsers);
 router.get('/:id', getUserById);
 
 // Rota para criar um novo usuário
-router.post('/', createUser);
+router.post('/', validateUserData, createUser);
 
 // Rota para atualizar um usuário pelo ID
 router.put('/:id', updateUser);
