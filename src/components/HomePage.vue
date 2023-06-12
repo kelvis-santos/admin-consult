@@ -1,23 +1,3 @@
-<!-- <template>
-    <div>
-        <TopHomeMenu />
-        <Sidebar
-            :isActive="false"
-        />
-    </div>
-    <div class="menu-dashboard">
-        <h2>Welcome to the Home Page!</h2>
-        <div class="icons-menu-dashboard">
-            <router-link to="/user">Usuarios</router-link>
-            <router-link to="/plans">Planos</router-link>
-            <router-link to="/orders">Solicitações</router-link>
-            <router-link to="/settings">Configurações</router-link>
-            <router-link to="/profile">Perfis</router-link>
-            <router-link to="/dashboard">Dashboard</router-link>
-        </div>
-    </div>
-</template> -->
-
 <template>
     <v-app id="inspire">
         <v-app-bar>
@@ -30,8 +10,13 @@
         </v-app-bar>
 
         <v-navigation-drawer v-model="drawer" temporary>
-            <v-list :items="items" item-title="name" item-value="id"></v-list>
-            <!--  -->
+            <v-list v-for="item, index in menuDefault" :key="index">
+                <v-list-item :to="item.path">
+                    <v-list-item-content>
+                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
         </v-navigation-drawer>
 
         <v-main class="bg-grey-lighten-2">
@@ -42,7 +27,7 @@
                             <v-col v-for="option, index in menuDefault" :key="index" cols="12" md="3">
                                 <v-item>
                                     <v-card
-                                        class="d-flex align-center teste" dark height="100" >
+                                        class="d-flex align-center teste" dark height="100" :to="option.path">
                                         <v-scroll-y-transition>
                                             <div class="text flex-grow-1 text-center">
                                                 {{ option.name }} 
