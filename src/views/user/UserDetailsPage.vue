@@ -66,7 +66,7 @@
         <v-col cols="12" md="3">
           <v-text-field v-model="password" :rules="passwordRule" label="Senha" required></v-text-field>
         </v-col>
-  
+
         <v-col cols="12" md="3">
           <v-text-field v-model="password2" :rules="passwordRule" label="Confirmacao de senha" required></v-text-field>
         </v-col>
@@ -79,7 +79,7 @@
           <v-btn color="primary">Salvar</v-btn>
         </v-col>
         <v-col cols="12" md="3">
-          <v-btn color="primary">Cancelar</v-btn>
+          <v-btn color="primary" :to="'/user'">Cancelar</v-btn>
         </v-col>
       </v-row>
     </v-container>

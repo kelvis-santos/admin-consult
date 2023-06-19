@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import api from '../services/RestService.js';
+import api from '@/services/RestService.js';
 
 export default {
   name: 'LoginPage',

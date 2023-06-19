@@ -1,5 +1,5 @@
 <template>
-    <v-table fixed-header height="300px">
+    <v-table fixed-header class="table-size">
         <thead>
             <tr>
                 <th class="text-left">Name</th>
@@ -82,3 +82,9 @@ export default {
     },
 }
 </script>
+<style scoped>
+.table-size {
+    width: 100vh;
+    height: auto;
+}
+</style>
