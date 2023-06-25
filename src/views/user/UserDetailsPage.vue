@@ -76,7 +76,7 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="3">
-          <v-btn color="primary">Salvar</v-btn>
+          <v-btn color="primary" @click="updateUser" >Salvar</v-btn>
         </v-col>
         <v-col cols="12" md="3">
           <v-btn color="primary" :to="'/user'">Cancelar</v-btn>
@@ -84,15 +84,32 @@
       </v-row>
     </v-container>
   </v-form>
+  <v-snackbar
+    v-model="userUpdated"
+    :timeout="2000"
+    color="success"
+    elevation="24"
+  >
+    User updated successfully!
+  </v-snackbar>
 </template>
 <script>
 import moment from "moment"
+import api from '@/services/RestService.js';
 
   export default {
     data: () => ({
       valid: false,
       firstname: '',
       lastname: '',
+      userUpdated: false,
+      birthDate: '',
+      zip: '',
+      number: '',
+      adress: '',
+      city: '',
+      state: '',
+      country: '',
       nameRules: [
         value => {
           if (value) return true
@@ -179,23 +196,39 @@ import moment from "moment"
           return 'Zip is requred.'
         },
       ],
+      password2: '',
+      password: '',
     }),
 
+    mounted() {
+      this.getUser()
+    },
+
+    watch: {
+      userUpdated() {
+        setTimeout(() => {
+          this.userUpdated = false
+        }, 3000)
+      }
+    },
+
     computed: {
-      birthDate: {
-        get() {
-          return moment(this.$data.birthDate).format('DD/MM/YYYY')
-        },
-        set(value) {
-          this.$data.birthDate = moment(value, 'DD/MM/YYYY').format('YYYY-MM-DD')
-        },
-      },
+      // birthDate: {
+      //   get() {
+      //     return moment(this.$data.birthDate).format('DD/MM/YYYY')
+      //   },
+      //   set(value) {
+      //     this.$data.birthDate = moment(value, 'DD/MM/YYYY').format('YYYY-MM-DD')
+      //   },
+      // },
       phone2: {
         get() {
           return this.$data.phone2
         },
         set(value) {
-          this.$data.phone2 = value.replace(/\D/g, '')
+          if (value) {
+            this.$data.phone2 = value.replace(/\D/g, '')
+          }
         },
       },
       phone: {
@@ -203,10 +236,12 @@ import moment from "moment"
           return this.$data.phone
         },
         set(value) {
-          this.$data.phone = value.replace(/\D/g, '')
+          if (value) {
+            this.$data.phone = value.replace(/\D/g, '')
+          }
         },
       },
-      passwordRules() {
+      passwordRule() {
         return [
           value => {
             if (value) return true
@@ -218,33 +253,82 @@ import moment from "moment"
 
             return 'Password must be at least 8 characters.'
           },
-          value => {
-            if (value?.length <= 20) return true
+          // value => {
+          //   if (value?.length <= 20) return true
 
-            return 'Password must be less than 20 characters.'
-          },
-          value => {
-            if (/(?=.*[a-z])/.test(value)) return true
+          //   return 'Password must be less than 20 characters.'
+          // },
+          // value => {
+          //   if (/(?=.*[a-z])/.test(value)) return true
 
-            return 'Password must contain at least one lowercase letter.'
-          },
-          value => {
-            if (/(?=.*[A-Z])/.test(value)) return true
+          //   return 'Password must contain at least one lowercase letter.'
+          // },
+          // value => {
+          //   if (/(?=.*[A-Z])/.test(value)) return true
 
-            return 'Password must contain at least one uppercase letter.'
-          },
-          value => {
-            if (/(?=.*[0-9])/.test(value)) return true
+          //   return 'Password must contain at least one uppercase letter.'
+          // },
+          // value => {
+          //   if (/(?=.*[0-9])/.test(value)) return true
 
-            return 'Password must contain at least one number.'
-          },
-          value => {
-            if (/(?=.*[!@#$%^&*])/.test(value)) return true
+          //   return 'Password must contain at least one number.'
+          // },
+          // value => {
+          //   if (/(?=.*[!@#$%^&*])/.test(value)) return true
 
-            return 'Password must contain at least one special character.'
-          },
+          //   return 'Password must contain at least one special character.'
+          // },
         ]
       },
-    }
+    },
+
+    methods: {
+      getUser() {
+        api.get(`/users/${this.$route.params.id}`).then((response) => {
+
+          this.firstname = response.data.firstname
+          this.lastname = response.data.lastname
+          this.email = response.data.email
+          this.birthDate = moment(response.data.birthDate).format("DD/MM/YYYY")
+          this.phone = response.data.phone
+          this.phone2 = response.data.phone2
+          this.zip = response.data.zip
+          this.number = response.data.number
+          this.adress = response.data.adress
+          this.city = response.data.city
+          this.state = response.data.state
+          this.country = response.data.country
+        })
+      },
+
+      updateUser() {
+        
+        const user = {
+          firstname: this.firstname,
+          lastname: this.lastname,
+          email: this.email,
+          birthDate: moment(this.birthDate).format('X'),
+          phone: this.phone,
+          phone2: this.phone2,
+          zip: this.zip,
+          number: this.number,
+          adress: this.adress,
+          city: this.city,
+          state: this.state,
+          country: this.country,
+          password: this.password,
+        }
+        api.put(`/users/${this.$route.params.id}`, user).then((response) => {
+          if (response.status === 200) {
+            this.userUpdated = true
+          }
+        })
+        .catch((error) => {
+          this.userUpdated = false
+          console.log(error)
+        })
+      },
+    },
+
   }
 </script>

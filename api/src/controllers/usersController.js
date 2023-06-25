@@ -56,20 +56,30 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, email, password } = req.body;
+        const { firstname, lastname, email, birthdate, phone, phone2, password, zip, number, adress, city, state, country } = req.body;
         // Verificar se o usuário existe no banco de dados
         const user = await User.findUserById(id);
         if (!user) {
             return res.status(404).json({ message: 'Usuário não encontrado' });
         }
 
-        // Atualizar os dados do usuário
-        user.name = name;
+        user.firstname = firstname;
+        user.lastname = lastname;
         user.email = email;
         user.password = password;
-        await user.save();
+        user.birthdate = birthdate;
+        user.phone = phone;
+        user.phone2 = phone2;
+        user.zip = zip;
+        user.number = number;
+        user.adress = adress;
+        user.city = city;
+        user.state = state;
+        user.country = country;
 
-        res.status(200).json(user);
+        const userUpdated = await User.update(user);
+
+        res.status(200).json(userUpdated);
     } catch (error) {
         console.error('Erro ao atualizar usuário:', error);
         res.status(500).json({ message: 'Erro ao atualizar usuário' });

@@ -2,7 +2,7 @@
     <v-toolbar density="comfortable" title="Lista de Usuarios">
         <v-btn color="primary" dark :to="'/home'">Voltar</v-btn>
     </v-toolbar>
-    <v-container class="">
+    <v-container>
         <v-row>
             <v-col cols="12" md="6">
                 <v-text-field label="Buscar" outlined dense></v-text-field>
@@ -12,10 +12,19 @@
             </v-col>
         </v-row>
     </v-container>
-    <TableList class="table-position" :users="users" />
+    <v-container v-if="users.length === 0">
+        <v-row>
+            <v-col cols="12">
+                <v-alert type="warning" outlined>
+                    Nenhum registro encontrado.
+                </v-alert>
+            </v-col>
+        </v-row>
+    </v-container>
+    <TableList v-else class="table-position" :users="users" />
 </template>
 <script>
-import axios from 'axios'
+import api from '@/services/RestService.js';
 import TableList from '@/components/TableList.vue'
 
 export default {
@@ -32,7 +41,7 @@ export default {
     },
     methods: {
         getUsers() {
-            axios.get('https://jsonplaceholder.typicode.com/users')
+            api.get('users/')
                 .then(response => {
                     this.users = response.data
                 })
@@ -45,7 +54,6 @@ export default {
 </script>
 <style scoped>
 .table-position {
-    position: absolute;
     bottom: 0;
     width: 100%;
 }

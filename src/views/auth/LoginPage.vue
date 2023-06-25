@@ -14,12 +14,13 @@
         hide-details="auto"
       ></v-text-field>
       <v-text-field
-        type="password"
+        :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="show ? 'text' : 'password'"
         label="Password"
         :rules="rulesPassword"
         v-model="password"
+        @click:append="show = !show"
       ></v-text-field>
-
       
       <v-btn
         color="deep-purple-lighten-2"
@@ -33,8 +34,17 @@
         </template>
       </v-btn>
     </v-card>
-    <p v-if="error" class="error">{{ error }}</p>
-    <router-link to="/forgot-password">Forgot Password?</router-link>
+    <div class="text-center">
+      <v-alert
+        v-if="error"
+        type="error"
+        dismissible
+        class="ma-2"
+      >
+        {{ error }}
+      </v-alert>
+      <router-link to="/forgot-password">Forgot Password?</router-link>
+    </div>
   </div>
 </template>
 
@@ -49,6 +59,7 @@ export default {
       password: '',
       error: '',
       loading: false,
+      show: false,
       rulesEmail: [
         value => !!value || 'Required.',
         value => (value || '').length <= 20 || 'Max 20 characters',
@@ -67,6 +78,13 @@ export default {
   watch: {
     loading (val) {
       if (!val) return
+    },
+
+    error (val) {
+      if (!val) return
+      setTimeout(() => {
+        this.error = ''
+      }, 5000)
     },
   },
   methods: {
