@@ -1,8 +1,8 @@
 const validateUserData = (req, res, next) => {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
 
     // Verificar se todos os campos obrigatórios estão presentes
-    if (!name || !email || !password) {
+    if (!email || !password) {
         return res.status(400).json({ message: 'Todos os campos devem ser preenchidos' });
     }
 

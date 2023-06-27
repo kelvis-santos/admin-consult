@@ -7,7 +7,7 @@
   <v-form v-model="valid">
     <v-container>
       <v-row>
-        <v-toolbar-title>Editar</v-toolbar-title>
+        <v-toolbar-title>{{ editUser ? 'Editar' : 'Cadastrar' }}</v-toolbar-title>
       </v-row>
       <v-row>
         <v-col cols="12" md="3">
@@ -75,8 +75,11 @@
     </v-container>
     <v-container>
       <v-row>
-        <v-col cols="12" md="3">
+        <v-col v-if="editUser" cols="12" md="3">
           <v-btn color="primary" @click="updateUser" >Salvar</v-btn>
+        </v-col>
+        <v-col v-else cols="12" md="3">
+          <v-btn color="primary" @click="saveNewUser" >Salvar</v-btn>
         </v-col>
         <v-col cols="12" md="3">
           <v-btn color="primary" :to="'/user'">Cancelar</v-btn>
@@ -198,10 +201,15 @@ import api from '@/services/RestService.js';
       ],
       password2: '',
       password: '',
+      editUser: false
     }),
 
     mounted() {
-      this.getUser()
+      // call getUser when url has id
+      if (this.$route.params.id) {
+        this.getUser()
+        this.editUser = true
+      }
     },
 
     watch: {
@@ -302,7 +310,6 @@ import api from '@/services/RestService.js';
       },
 
       updateUser() {
-        
         const user = {
           firstname: this.firstname,
           lastname: this.lastname,
@@ -328,6 +335,38 @@ import api from '@/services/RestService.js';
           console.log(error)
         })
       },
+
+// create a method to create a new user
+      saveNewUser() {
+        const user = {
+          firstname: this.firstname,
+          lastname: this.lastname,
+          email: this.email,
+          birthDate: moment(this.birthDate).format('X'),
+          phone: this.phone,
+          phone2: this.phone2,
+          zip: this.zip,
+          number: this.number,
+          adress: this.adress,
+          city: this.city,
+          state: this.state,
+          country: this.country,
+          password: this.password,
+        }
+        api.post(`/users`, user).then((response) => {
+          if ([201, 200, 203].includes(response.status)) {
+            this.userUpdated = true
+            // add redirect to /users after 4 seconds
+            setTimeout(() => {
+              this.$router.push('/user')
+            }, 4000)
+          }
+        })
+        .catch((error) => {
+          this.userUpdated = false
+          console.log(error)
+        })
+      }
     },
 
   }

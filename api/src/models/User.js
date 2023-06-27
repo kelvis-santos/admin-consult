@@ -28,7 +28,7 @@ export default class User {
             country
         ];
         const result = await queryDb(query, values);
-        return result.rows[0];
+        return result[0];
     }
 
     static async findUsers() {

@@ -36,15 +36,29 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { firstname, lastname, email, birthdate, phone, phone2, password, zip, number, adress, city, state, country } = req.body;
         // Verificar se o usuário já existe no banco de dados
-        const existingUser = await User.findByFilter({ name });
+        const existingUser = await User.findByFilter({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'Usuário já existe' });
         }
 
         // Criar um novo usuário
-        const newUser = User.create(name, email, password);
+        const newUser = User.create({
+            firstname,
+            lastname,
+            email,
+            birthdate,
+            phone,
+            phone2,
+            password,
+            zip,
+            number,
+            adress,
+            city,
+            state,
+            country
+        });
 
         res.status(201).json(newUser);
     } catch (error) {
