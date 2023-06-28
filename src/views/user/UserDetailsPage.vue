@@ -35,7 +35,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" md="3">
-          <v-text-field v-model="zip" :rules="zipRules" label="CEP" required></v-text-field>
+          <v-text-field v-model="zip" :rules="zipRules" label="CEP" @change="autoGetZipCodeData" required></v-text-field>
         </v-col>
 
         <v-col cols="12" md="2">
@@ -99,6 +99,7 @@
 <script>
 import moment from "moment"
 import api from '@/services/RestService.js';
+import ZipCodeService from '@/services/ZipCodeService.js';
 
   export default {
     data: () => ({
@@ -217,7 +218,7 @@ import api from '@/services/RestService.js';
         setTimeout(() => {
           this.userUpdated = false
         }, 3000)
-      }
+      },
     },
 
     computed: {
@@ -291,6 +292,17 @@ import api from '@/services/RestService.js';
     },
 
     methods: {
+      async autoGetZipCodeData() {
+        if (this.zip.length === 8) {
+          const response = await ZipCodeService.getZipCode(this.zip)
+          if (response) {
+            this.adress = response.logradouro
+            this.city = response.localidade
+            this.state = response.uf
+            this.country = response.country ?? 'Brasil'
+          }
+        }
+      },
       getUser() {
         api.get(`/users/${this.$route.params.id}`).then((response) => {
 
@@ -326,7 +338,7 @@ import api from '@/services/RestService.js';
           password: this.password,
         }
         api.put(`/users/${this.$route.params.id}`, user).then((response) => {
-          if (response.status === 200) {
+          if ([201, 200, 203].includes(response.status)) {
             this.userUpdated = true
           }
         })
@@ -336,7 +348,6 @@ import api from '@/services/RestService.js';
         })
       },
 
-// create a method to create a new user
       saveNewUser() {
         const user = {
           firstname: this.firstname,
@@ -356,7 +367,6 @@ import api from '@/services/RestService.js';
         api.post(`/users`, user).then((response) => {
           if ([201, 200, 203].includes(response.status)) {
             this.userUpdated = true
-            // add redirect to /users after 4 seconds
             setTimeout(() => {
               this.$router.push('/user')
             }, 4000)
@@ -368,6 +378,5 @@ import api from '@/services/RestService.js';
         })
       }
     },
-
   }
 </script>
