@@ -1,5 +1,5 @@
 <template>
-    <v-table fixed-header class="table-size">
+    <v-table v-if="users" fixed-header class="table-size">
         <thead>
             <tr>
                 <th class="text-left">Name</th>
@@ -17,6 +17,32 @@
                     <v-btn
                         color="primary"
                         :to="`/user/${user.id}`"
+                        text
+                    >
+                        Details
+                    </v-btn>
+                </td>
+            </tr>
+        </tbody>
+    </v-table>
+    <v-table v-else-if="products" fixed-header class="table-size">
+        <thead>
+            <tr>
+                <th class="text-left">Name</th>
+                <th class="text-left">Description</th>
+                <th class="text-left">Price</th>
+                <th class="text-left">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="product, index in products" :key="index">
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td>
+                    <v-btn
+                        color="primary"
+                        :to="`/product/${product.id}`"
                         text
                     >
                         Details
@@ -77,7 +103,11 @@ export default {
     props: {
         users: {
             type: Array,
-            required: true,
+            required: false,
+        },
+        products: {
+            type: Array,
+            required: false,
         },
     },
 }

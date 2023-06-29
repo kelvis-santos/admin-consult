@@ -102,6 +102,10 @@ export default {
                     path: '/dashboard',
                     name: 'Dashboard',
                 },
+                {
+                    path: '/products',
+                    name: 'Produtos',
+                }
             ]
         };
     },

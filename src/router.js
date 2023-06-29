@@ -81,6 +81,24 @@ const routes = [
     component: () => import('./views/settings/SettingsPage.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/products',
+    name: 'Products',
+    component: () => import('./views/product/ProductsListPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/products/:id',
+    name: 'ProductDetails',
+    component: () => import('./views/product/ProductDetailsPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/product/register',
+    name: 'ProductRegister',
+    component: () => import('./views/product/ProductDetailsPage.vue'),
+    meta: { requiresAuth: true },
+  },
 
 ];
 
