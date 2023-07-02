@@ -8,6 +8,7 @@ import reportsRoutes from '../routes/reportsRoutes.js';
 import settinsRoutes from '../routes/settingsRoutes.js';
 import userPermissionsRoutes from '../routes/userPermissionsRoutes.js';
 import productsRoutes from '../routes/productsRoutes.js';
+import customerRoutes from '../routes/customerRoutes.js';
 
 // Configurações do servidor
 const app = express();
@@ -30,6 +31,7 @@ app.use('/reports', reportsRoutes);
 app.use('/settings', settinsRoutes);
 app.use('/user-permissions', userPermissionsRoutes);
 app.use('/products', productsRoutes);
+app.use('/customer', customerRoutes);
 
 
 // Iniciar o servidor

@@ -88,7 +88,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/products/:id',
+    path: '/product/:id',
     name: 'ProductDetails',
     component: () => import('./views/product/ProductDetailsPage.vue'),
     meta: { requiresAuth: true },
@@ -99,7 +99,24 @@ const routes = [
     component: () => import('./views/product/ProductDetailsPage.vue'),
     meta: { requiresAuth: true },
   },
-
+  {
+    path: '/customers',
+    name: 'Customers',
+    component: () => import('./views/customer/CustomersListPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/customer/:id',
+    name: 'CustomerDetails',
+    component: () => import('./views/customer/CustomerDetailsPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/customer/register',
+    name: 'CustomerRegister',
+    component: () => import('./views/customer/CustomerDetailsPage.vue'),
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({

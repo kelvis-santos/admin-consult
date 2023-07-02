@@ -51,28 +51,6 @@ export default {
     data() {
         return {
             drawer: null,
-            items: [
-                {
-                    name: 'Item #1',
-                    id: 1,
-                },
-                {
-                    name: 'Item #2',
-                    id: 2,
-                },
-                {
-                    name: 'Item #3',
-                    id: 3,
-                },
-                {
-                    name: 'Item #4',
-                    id: 4,
-                },
-                {
-                    name: 'Item #5',
-                    id: 5,
-                },
-            ],
             menuDefault: [
                 {
                     path: '/home',
@@ -94,10 +72,10 @@ export default {
                     path: '/settings',
                     name: 'Configurações',
                 },
-                {
-                    path: '/profile',
-                    name: 'Perfis',
-                },
+                // {
+                //     path: '/profile',
+                //     name: 'Perfis',
+                // },
                 {
                     path: '/dashboard',
                     name: 'Dashboard',
@@ -105,6 +83,10 @@ export default {
                 {
                     path: '/products',
                     name: 'Produtos',
+                },
+                {
+                    path: '/customers',
+                    name: 'Clientes',
                 }
             ]
         };
